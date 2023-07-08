@@ -44,5 +44,8 @@ public class WebDriverConf {
 	public void closePage() {
 		driver.close();
 	}
+	public void quitPage() {
+		driver.quit();
+	}
 
 }

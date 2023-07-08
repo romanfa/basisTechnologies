@@ -1,4 +1,5 @@
 package basisTechnologies.pages;
+
 import java.time.Duration;
 
 import org.openqa.selenium.By;
@@ -11,20 +12,21 @@ import basisTechnologies.infrastructure.WebDriverConf;
 
 public class BasisHomePage {
 	WebElement element;
-	
+	Actions action;
+	WebDriverWait wait;
+
 	public BasisHomePage clickOnHeader(String name) {
-		element = WebDriverConf.driver.findElement(By.xpath("//div[@class='oxy-header-container']//div[text()='"+name+"']"));
-		//element.click();
-		Actions action = new Actions(WebDriverConf.driver);
-		action.moveToElement(element).perform();
+			element = WebDriverConf.driver
+					.findElement(By.xpath("//div[@class='oxy-header-container']//div[text()='" + name + "']"));
+			action = new Actions(WebDriverConf.driver);
+			action.moveToElement(element).perform();
 		return this;
 	}
-	
+
 	public void clickOnCombo(String name) {
-		element = WebDriverConf.driver.findElement(By.xpath("//div[text()='"+name+"']"));
-		WebDriverWait wait = new WebDriverWait(WebDriverConf.driver,Duration.ofMillis(5000));
-		wait.until(ExpectedConditions.visibilityOf(element));
-		element.click();
-		
+			element = WebDriverConf.driver.findElement(By.xpath("//div[text()='" + name + "']"));
+			wait = new WebDriverWait(WebDriverConf.driver, Duration.ofMillis(5000));
+			wait.until(ExpectedConditions.visibilityOf(element));
+			element.click();
 	}
 }
