@@ -1,18 +1,16 @@
 package basisTechnologies.tests;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import static org.junit.jupiter.api.Assertions.*;
 
-import basisTechnologies.pages.*;
+import java.util.List;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.provider.CsvSource;
+
 import basisTechnologies.infrastructure.*;
+import basisTechnologies.pages.*;
 
-//@RunWith(Parameterized.class)
 public class ApplyForThisJobTests {
 
 	private static BasisHomePage basisHomePage;
@@ -22,11 +20,8 @@ public class ApplyForThisJobTests {
 	private static CareersPage careersPage;
 	private static WebDriverConf webDriver;
 	private static Utils utils;
-	private static final Logger logger = LogManager.getLogger(CareersPage.class);
 
-	private String noJobsAppearsForSelectedFilterMessage="No jobs found on selected filter";
-	
-	@BeforeClass
+	@BeforeAll
 	public static void setup() {
 		basisHomePage = new BasisHomePage();
 		viewAllPositionsPage = new ViewAllPositionsPage();
@@ -35,34 +30,114 @@ public class ApplyForThisJobTests {
 		applyForThatJobPage = new ApplyForThatJobPage();
 		utils = new Utils();
 		webDriver = new WebDriverConf();
-	}
-
-	@Before
-	public void before() {
+		// go to final page before running tests
 		webDriver.openPage("https://basis.com");
-	}
-
-	@AfterClass
-	public static void end() {
-		webDriver.quitPage();
-	}
-
-	// Attach
-	@Test
-	public void attachResume() {
-	// Inside Home page click on Company ComboBox and on Careers
+		
 		basisHomePage.clickOnHeader("Company").clickOnCombo("Careers");
 		viewAllPositionsPage.clickOnViewAllPositionsButton();
 		utils.changeFocusWindowDriver();
 		careersPage.filterBy("Location").clickOnFilterMenu("United States");
 		// Check if positions exists
-		if (careersPage.clickOnFirstJobPosition()) {
+		careersPage.clickOnFirstJobPosition();
+		applyForThatJobPage.clickOnApplyForThisJobButton();
+	}
 
-			applyForThatJobPage.clickOnApplyForThisJobButton();
-			
-			applyPage.attachResume(utils.getResourceFile("resumeWithName.txt") );
-		} else {
-			logger.info(noJobsAppearsForSelectedFilterMessage);
+	@AfterAll
+	public static void end() {
+		webDriver.quitPage();
+	}
+
+
+	@Test
+	public void attachResumeTest() {
+		boolean isSuccess;
+		List<String> resumeListFilesFromResources = utils.getFileListFromResourceDirectory("resumeFiles");
+		// read all files from directory inside resource folder
+		for (String nameOfFile : resumeListFilesFromResources) {
+			applyPage.attachResume(utils.getResourceFile(nameOfFile));
+			isSuccess = nameOfFile.contains("Success")?true:false;
+			if (isSuccess) {
+				assertTrue(applyPage.isUploadSucceded(), "Resume " + nameOfFile + " not uploded as expected");
+			} else {
+				assertFalse(applyPage.isUploadSucceded(), "Resume " + nameOfFile + " not uploded as expected");
+			}
 		}
+	}
+
+	@Test
+	public void pronounsCheckUncheckTest() {
+		// Check and Uncheck tests for every fields
+		List<String> checkboxValues = applyPage.getCheckBoxPronounsValues();
+		for (String pronouns : checkboxValues) {
+			assertTrue(applyPage.clickOnCheckboxPronouns(pronouns), "Checkbox not checked after clicking on it for: " + pronouns + "");
+			assertFalse(applyPage.clickOnCheckboxPronouns(pronouns), "Checkbox not unchecked after clicking on it for: " + pronouns + "");
+		}
+	}
+
+	// Click on multiple checkboxes excluding "Use name only" and "Custom" and
+	// ensure all checkboxes is checked
+	@Test
+	public void pronounsMultipleCheckTest() {
+		// Ensure before test all checkboxes unchecked
+		applyPage.ensureAllCheckBoxesUnchecked();
+		List<String> checkboxValues = applyPage.getCheckBoxPronounsValues();
+		// click on all checkbox
+		for (String pronouns : checkboxValues) {
+			if (!pronouns.equals("Use name only") && !pronouns.equals("Custom"))
+				applyPage.clickOnCheckboxPronouns(pronouns);
+		}
+		// ensure they checked
+		for (String pronouns : checkboxValues) {
+			if (!pronouns.equals("Use name only") && !pronouns.equals("Custom")) {
+				assertTrue(applyPage.isPronounsChecked(pronouns), "CheckBox " + pronouns + " not checked");
+			}
+		}
+		applyPage.ensureAllCheckBoxesUnchecked();
+	}
+
+	// click on all checkboxes and after that click on UseNameOnly and ensure all check boxes unchecked
+	@Test
+	public void pronounsUseNameOnlyCheckBoxTest() {
+		// Ensure before test all checkboxes unchecked
+		applyPage.ensureAllCheckBoxesUnchecked();
+		// Check all checkboxes without UseNameOnly and Custom
+		List<String> checkboxValues = applyPage.getCheckBoxPronounsValues();
+		for (String pronouns : checkboxValues) {
+			if (!pronouns.equals("Use name only") && !pronouns.equals("Custom"))
+				applyPage.clickOnCheckboxPronouns(pronouns);
+		}
+		// Click on UseNameOnly
+		applyPage.clickOnCheckboxPronouns("Use name only");
+		// ensure all checkboxes unchecked:
+		for (String pronouns : checkboxValues) {
+			if (!pronouns.equals("Use name only") && !pronouns.equals("Custom")) {
+				assertFalse(applyPage.isPronounsChecked(pronouns), "CheckBox " + pronouns + " not unchecked");
+			}
+		}
+		applyPage.ensureAllCheckBoxesUnchecked();
+	}
+
+	@Test
+	public void pronounsCustomCheckBoxTest() {
+		// Ensure before test all checkboxes unchecked
+		applyPage.ensureAllCheckBoxesUnchecked();
+		// Check all checkboxes without UseNameOnly and Custom
+		List<String> checkboxValues = applyPage.getCheckBoxPronounsValues();
+		for (String pronouns : checkboxValues) {
+			if (!pronouns.equals("Use name only") && !pronouns.equals("Custom"))
+				applyPage.clickOnCheckboxPronouns(pronouns);
+		}
+		// Click on UseNameOnly
+		applyPage.clickOnCheckboxPronouns("Custom");
+		// ensure all checkboxes unchecked:
+		for (String pronouns : checkboxValues) {
+			if (!pronouns.equals("Use name only") && !pronouns.equals("Custom")) {
+				assertFalse(applyPage.isPronounsChecked(pronouns), "Not correct behaviour after click on Custom checkbox");
+			}
+		}
+
+		assertTrue(applyPage.isTextBoxVisibleAfterClickOnCustom(), "Textbox not appeared after click on Custom checkbox");
+		// check if TextBox appears
+		applyPage.ensureAllCheckBoxesUnchecked();
 	}
 }

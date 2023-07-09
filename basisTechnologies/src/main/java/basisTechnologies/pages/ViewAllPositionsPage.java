@@ -8,9 +8,10 @@ import basisTechnologies.infrastructure.WebDriverConf;
 public class ViewAllPositionsPage {
 
 	WebElement element;
-
+	By viewAllPostion=By.xpath("//a[text()='View All Positions']");
+	
 	public void clickOnViewAllPositionsButton() {
-			element = WebDriverConf.driver.findElement(By.xpath("//a[text()='View All Positions']"));
+			element = WebDriverConf.driver.findElement(viewAllPostion);
 			element.click();
 	}
 

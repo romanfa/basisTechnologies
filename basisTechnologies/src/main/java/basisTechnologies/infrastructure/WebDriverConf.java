@@ -33,7 +33,6 @@ public class WebDriverConf {
 		chromeOptions.setExperimentalOption("prefs", prefs);
 
 		driver= new ChromeDriver(chromeOptions);
-		
 	}
 
 

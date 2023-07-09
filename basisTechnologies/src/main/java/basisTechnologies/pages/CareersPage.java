@@ -14,21 +14,18 @@ public class CareersPage {
 
 	WebElement element;
 	WebDriverWait wait;
-
+	By applyButtons=By.xpath("//div[@class='posting-apply']//a[text()='Apply']");
+	String filterHeadTitles="//div[normalize-space()='%s']//*[name()='svg']";
+	String filterMenu="//a[text()='\" + filterNameSub + \"']";
+	
 	public CareersPage filterBy(String filterName) {
-
-		// element =
-		// WebDriverConf.driver.findElement(By.xpath("//div[@class='filter-bar']//div[@class='filter-button'
-		// and text()='Location']"));
-		element = WebDriverConf.driver
-				.findElement(By.xpath("//div[normalize-space()='" + filterName + "']//*[name()='svg']"));
+		element = WebDriverConf.driver.findElement(By.xpath(String.format(filterHeadTitles, filterName)));
 		element.click();
-
 		return this;
 	}
 
 	public CareersPage clickOnFilterMenu(String filterNameSub) {
-		element = WebDriverConf.driver.findElement(By.xpath("//a[text()='" + filterNameSub + "']"));
+		element = WebDriverConf.driver.findElement(By.xpath(String.format(filterMenu, filterNameSub)));
 		wait = new WebDriverWait(WebDriverConf.driver, Duration.ofMillis(5000));
 		wait.until(ExpectedConditions.visibilityOf(element));
 		element.click();
@@ -36,25 +33,18 @@ public class CareersPage {
 	}
 
 	public boolean checkIfPositionsListExists() {
-
-		List<WebElement> elements = WebDriverConf.driver
-				.findElements(By.xpath("//div[@class='posting-apply']//a[text()='Apply']"));
+		List<WebElement> elements = WebDriverConf.driver.findElements(applyButtons);
 		return !elements.isEmpty();
-
 	}
 
 	public boolean clickOnFirstJobPosition() {
 
-		List<WebElement> elements = WebDriverConf.driver
-				.findElements(By.xpath("//div[@class='posting-apply']//a[text()='Apply']"));
+		List<WebElement> elements = WebDriverConf.driver.findElements(applyButtons);
 		if (!elements.isEmpty()) {
-
 			elements.get(0).click();
 			return true;
 		} else {
-
 			return false;
 		}
-
 	}
 }
