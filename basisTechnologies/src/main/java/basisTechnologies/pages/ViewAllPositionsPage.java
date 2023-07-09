@@ -13,5 +13,4 @@ public class ViewAllPositionsPage {
 			element = WebDriverConf.driver.findElement(viewAllPostion);
 			element.click();
 	}
-
 }

@@ -22,11 +22,11 @@ public class Utils {
 		}
 	}
 	
-	public File getResourceFile(String fileName) 
+	public File getResourceFile(String fileName,String folderInsideResources) 
     {
         URL url = this.getClass()
             .getClassLoader()
-            .getResource(fileName);
+            .getResource(folderInsideResources+"/"+fileName);
         
         if(url == null) {
             throw new IllegalArgumentException(fileName + " is not found 1");

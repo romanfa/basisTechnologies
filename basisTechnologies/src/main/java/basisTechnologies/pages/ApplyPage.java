@@ -30,7 +30,7 @@ public class ApplyPage {
 
 	public boolean isUploadSucceded() {
 		try {
-			wait = new WebDriverWait(WebDriverConf.driver, Duration.ofMillis(8000));
+			wait = new WebDriverWait(WebDriverConf.driver, Duration.ofMillis(12000));
 			wait.until(ExpectedConditions.presenceOfElementLocated(sucessElement));
 			// Element Present in DOM
 			return true;

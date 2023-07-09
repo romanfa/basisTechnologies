@@ -15,7 +15,7 @@ public class CareersPage {
 	WebDriverWait wait;
 	By applyButtons=By.xpath("//div[@class='posting-apply']//a[text()='Apply']");
 	String filterHeadTitles="//div[normalize-space()='%s']//*[name()='svg']";
-	String filterMenu="//a[text()='\" + filterNameSub + \"']";
+	String filterMenu="//a[text()='%s']";
 	
 	public CareersPage filterBy(String filterName) {
 		element = WebDriverConf.driver.findElement(By.xpath(String.format(filterHeadTitles, filterName)));

@@ -17,6 +17,7 @@ public class ApplyForThisJobTests {
 	private static CareersPage careersPage;
 	private static WebDriverConf webDriver;
 	private static Utils utils;
+	public static final String FOLDERNAME_INSIDE_RESOURCES="resumeFiles";
 
 	@BeforeAll
 	public static void setup() {
@@ -29,7 +30,6 @@ public class ApplyForThisJobTests {
 		webDriver = new WebDriverConf();
 		// go to final page before running tests
 		webDriver.openPage("https://basis.com");
-		
 		basisHomePage.clickOnHeader("Company").clickOnCombo("Careers");
 		viewAllPositionsPage.clickOnViewAllPositionsButton();
 		utils.changeFocusWindowDriver();
@@ -44,14 +44,13 @@ public class ApplyForThisJobTests {
 		webDriver.quitPage();
 	}
 
-
 	@Test
 	public void attachResumeTest() {
 		boolean isSuccess;
 		List<String> resumeListFilesFromResources = utils.getFileListFromResourceDirectory("resumeFiles");
 		// read all files from directory inside resource folder
 		for (String nameOfFile : resumeListFilesFromResources) {
-			applyPage.attachResume(utils.getResourceFile(nameOfFile));
+			applyPage.attachResume(utils.getResourceFile(nameOfFile,FOLDERNAME_INSIDE_RESOURCES));
 			isSuccess = nameOfFile.contains("Success")?true:false;
 			if (isSuccess) {
 				assertTrue(applyPage.isUploadSucceded(), "Resume " + nameOfFile + " not uploded as expected");
