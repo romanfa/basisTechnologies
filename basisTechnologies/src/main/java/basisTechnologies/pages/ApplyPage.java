@@ -22,6 +22,17 @@ public class ApplyPage {
 	By allCheckBoxesInsidePronounce= By.xpath("//ul[@id='candidatePronounsCheckboxes']//input[@type='checkbox']");
 	By textBoxPronounsCommon= By.xpath("//ul[@id='candidatePronounsCheckboxes']//input[@type='checkbox']");
 	String checkboxPronouns= "//input[@type='checkbox' and @value='%s']";
+	By textOnAttachButton= By.xpath("//li[@class='application-question resume']//span[@class='default-label']");
+	
+	public boolean checkIfButtonEnabled() {
+		element = WebDriverConf.driver.findElement(attachButton);
+		return element.isEnabled();
+	} 
+	
+	public boolean compareTextOnButton(String expectedText) {
+		element = WebDriverConf.driver.findElement(textOnAttachButton);
+		return  expectedText.equals(element.getText());
+	} 
 	
 	public void attachResume(File fileName) {
 		element = WebDriverConf.driver.findElement(attachButton);

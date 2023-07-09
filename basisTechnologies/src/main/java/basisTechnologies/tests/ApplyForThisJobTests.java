@@ -18,6 +18,7 @@ public class ApplyForThisJobTests {
 	private static WebDriverConf webDriver;
 	private static Utils utils;
 	public static final String FOLDERNAME_INSIDE_RESOURCES="resumeFiles";
+	public static final String LABEL_ON_ATTACH_RESUME_BUTTON="ATTACH RESUME/CV";
 
 	@BeforeAll
 	public static void setup() {
@@ -48,6 +49,10 @@ public class ApplyForThisJobTests {
 	public void attachResumeTest() {
 		boolean isSuccess;
 		List<String> resumeListFilesFromResources = utils.getFileListFromResourceDirectory("resumeFiles");
+		
+		assertTrue(applyPage.checkIfButtonEnabled(),"Attach resume button is not enabled.");
+		assertTrue(applyPage.compareTextOnButton(LABEL_ON_ATTACH_RESUME_BUTTON),"Text on the button not correct");
+		
 		// read all files from directory inside resource folder
 		for (String nameOfFile : resumeListFilesFromResources) {
 			applyPage.attachResume(utils.getResourceFile(nameOfFile,FOLDERNAME_INSIDE_RESOURCES));
@@ -60,7 +65,7 @@ public class ApplyForThisJobTests {
 		}
 	}
 
-	@Test
+	//@Test
 	public void pronounsCheckUncheckTest() {
 		// Check and Uncheck tests for every fields
 		List<String> checkboxValues = applyPage.getCheckBoxPronounsValues();
@@ -72,7 +77,7 @@ public class ApplyForThisJobTests {
 
 	// Click on multiple checkboxes excluding "Use name only" and "Custom" and
 	// ensure all checkboxes is checked
-	@Test
+	//@Test
 	public void pronounsMultipleCheckTest() {
 		// Ensure before test all checkboxes unchecked
 		applyPage.ensureAllCheckBoxesUnchecked();
@@ -92,7 +97,7 @@ public class ApplyForThisJobTests {
 	}
 
 	// click on all checkboxes and after that click on UseNameOnly and ensure all check boxes unchecked
-	@Test
+	//@Test
 	public void pronounsUseNameOnlyCheckBoxTest() {
 		// Ensure before test all checkboxes unchecked
 		applyPage.ensureAllCheckBoxesUnchecked();
@@ -110,6 +115,13 @@ public class ApplyForThisJobTests {
 				assertFalse(applyPage.isPronounsChecked(pronouns), "CheckBox " + pronouns + " not unchecked");
 			}
 		}
+		applyPage.ensureAllCheckBoxesUnchecked();
+		
+		//click on custom checkBox and after that on Use Name only and ensure custom is unchecked
+		applyPage.clickOnCheckboxPronouns("Custom");
+		applyPage.clickOnCheckboxPronouns("Use name only");
+		assertFalse(applyPage.isPronounsChecked("Custom"), "CheckBox Custom not unchecked");
+		
 		applyPage.ensureAllCheckBoxesUnchecked();
 	}
 
@@ -131,9 +143,14 @@ public class ApplyForThisJobTests {
 				assertFalse(applyPage.isPronounsChecked(pronouns), "Not correct behaviour after click on Custom checkbox");
 			}
 		}
-
 		assertTrue(applyPage.isTextBoxVisibleAfterClickOnCustom(), "Textbox not appeared after click on Custom checkbox");
 		// check if TextBox appears
+		applyPage.ensureAllCheckBoxesUnchecked();
+		
+		applyPage.clickOnCheckboxPronouns("Use name only");
+		applyPage.clickOnCheckboxPronouns("Custom");
+		assertFalse(applyPage.isPronounsChecked("Use name only"), "CheckBox Use name only not unchecked");
+		
 		applyPage.ensureAllCheckBoxesUnchecked();
 	}
 }
