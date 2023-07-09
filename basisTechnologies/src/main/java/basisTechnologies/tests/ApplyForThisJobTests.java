@@ -19,6 +19,7 @@ public class ApplyForThisJobTests {
 	private static Utils utils;
 	public static final String FOLDERNAME_INSIDE_RESOURCES="resumeFiles";
 	public static final String LABEL_ON_ATTACH_RESUME_BUTTON="ATTACH RESUME/CV";
+	public static final String PLECEHOLDER_INSIDE_TEXTBOX="Write here...";
 
 	@BeforeAll
 	public static void setup() {
@@ -65,7 +66,7 @@ public class ApplyForThisJobTests {
 		}
 	}
 
-	//@Test
+	@Test
 	public void pronounsCheckUncheckTest() {
 		// Check and Uncheck tests for every fields
 		List<String> checkboxValues = applyPage.getCheckBoxPronounsValues();
@@ -77,7 +78,7 @@ public class ApplyForThisJobTests {
 
 	// Click on multiple checkboxes excluding "Use name only" and "Custom" and
 	// ensure all checkboxes is checked
-	//@Test
+	@Test
 	public void pronounsMultipleCheckTest() {
 		// Ensure before test all checkboxes unchecked
 		applyPage.ensureAllCheckBoxesUnchecked();
@@ -97,7 +98,7 @@ public class ApplyForThisJobTests {
 	}
 
 	// click on all checkboxes and after that click on UseNameOnly and ensure all check boxes unchecked
-	//@Test
+	@Test
 	public void pronounsUseNameOnlyCheckBoxTest() {
 		// Ensure before test all checkboxes unchecked
 		applyPage.ensureAllCheckBoxesUnchecked();
@@ -143,7 +144,6 @@ public class ApplyForThisJobTests {
 				assertFalse(applyPage.isPronounsChecked(pronouns), "Not correct behaviour after click on Custom checkbox");
 			}
 		}
-		assertTrue(applyPage.isTextBoxVisibleAfterClickOnCustom(), "Textbox not appeared after click on Custom checkbox");
 		// check if TextBox appears
 		applyPage.ensureAllCheckBoxesUnchecked();
 		
@@ -152,5 +152,14 @@ public class ApplyForThisJobTests {
 		assertFalse(applyPage.isPronounsChecked("Use name only"), "CheckBox Use name only not unchecked");
 		
 		applyPage.ensureAllCheckBoxesUnchecked();
+	}
+	
+	@Test
+	public void customCheckboxTextbox() {
+		applyPage.ensureAllCheckBoxesUnchecked();
+		applyPage.clickOnCheckboxPronouns("Custom");
+		
+		assertTrue(applyPage.isTextBoxVisibleAfterClickOnCustom(), "Textbox not appeared after click on Custom checkbox");
+		assertTrue(applyPage.compareTextPronounsCustomTextBox(PLECEHOLDER_INSIDE_TEXTBOX), "TextBox placeholder not correct");
 	}
 }

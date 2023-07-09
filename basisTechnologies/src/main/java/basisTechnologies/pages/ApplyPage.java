@@ -20,9 +20,10 @@ public class ApplyPage {
 	By attachButton= By.xpath("//input[@id='resume-upload-input']");
 	By sucessElement= By.xpath("//div[@class='application-field']//span[@class='resume-upload-success' and @style='display: inline;']");
 	By allCheckBoxesInsidePronounce= By.xpath("//ul[@id='candidatePronounsCheckboxes']//input[@type='checkbox']");
-	By textBoxPronounsCommon= By.xpath("//ul[@id='candidatePronounsCheckboxes']//input[@type='checkbox']");
+	By textBoxPronounsCustom= By.xpath("//input[@id='customPronounsTextField']");
 	String checkboxPronouns= "//input[@type='checkbox' and @value='%s']";
 	By textOnAttachButton= By.xpath("//li[@class='application-question resume']//span[@class='default-label']");
+	By textInsideTextBox= By.xpath("//li[@class='application-question resume']//span[@class='default-label']");
 	
 	public boolean checkIfButtonEnabled() {
 		element = WebDriverConf.driver.findElement(attachButton);
@@ -32,6 +33,11 @@ public class ApplyPage {
 	public boolean compareTextOnButton(String expectedText) {
 		element = WebDriverConf.driver.findElement(textOnAttachButton);
 		return  expectedText.equals(element.getText());
+	} 
+	
+	public boolean compareTextPronounsCustomTextBox(String expectedText) {
+		element = WebDriverConf.driver.findElement(textBoxPronounsCustom);
+		return  expectedText.equals(element.getAttribute("placeholder"));
 	} 
 	
 	public void attachResume(File fileName) {
@@ -84,7 +90,7 @@ public class ApplyPage {
 	
 	public boolean isTextBoxVisibleAfterClickOnCustom() {
         // Assuming that the input field appears when the checkbox is clicked
-        WebElement textField = WebDriverConf.driver.findElement(textBoxPronounsCommon);
+        WebElement textField = WebDriverConf.driver.findElement(textBoxPronounsCustom);
         String style = textField.getAttribute("style");
 
         if (!style.contains("display: none;")) {
