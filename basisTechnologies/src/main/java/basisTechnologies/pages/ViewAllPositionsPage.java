@@ -2,7 +2,6 @@ package basisTechnologies.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-
 import basisTechnologies.infrastructure.WebDriverConf;
 
 public class ViewAllPositionsPage {
