@@ -23,7 +23,6 @@ public class ApplyPage {
 	By textBoxPronounsCustom= By.xpath("//input[@id='customPronounsTextField']");
 	String checkboxPronouns= "//input[@type='checkbox' and @value='%s']";
 	By textOnAttachButton= By.xpath("//li[@class='application-question resume']//span[@class='default-label']");
-	By textInsideTextBox= By.xpath("//li[@class='application-question resume']//span[@class='default-label']");
 	
 	public boolean checkIfButtonEnabled() {
 		element = WebDriverConf.driver.findElement(attachButton);
