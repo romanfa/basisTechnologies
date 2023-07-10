@@ -9,7 +9,6 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import basisTechnologies.infrastructure.WebDriverConf;
 
 public class ApplyPage {
